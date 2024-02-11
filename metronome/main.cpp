@@ -8,12 +8,30 @@ using namespace std::chrono_literals;
 
 #include "metronome.hpp"
 
-#define LED_RED   17
-#define LED_GREEN 27
-#define BTN_MODE  23
-#define BTN_TAP   2
+#define LED_RED   3 // red led
+#define LED_GREEN 14 // green led
+#define BTN_MODE  26 // blue button
+#define BTN_TAP   2 //red button
 
 metronome myMetronome;
+
+void blink() {
+	bool on = false;
+	// ** This loop manages LED blinking. **
+	while (true) {
+		if (myMetronome.playMode){ //If playing, blink
+			auto bpm = myMetronome.get_bpm(); // get current bpm
+			auto delay = 60000ms / bpm; // bpm -> ms
+			// The LED state will toggle for delay.
+			gpioWrite(LED_GREEN, 1); // turn it on 
+			gpioWrite(LED_GREEN, 0); // turn it off 
+			std::this_thread::sleep_for(delay);
+		}
+		else {
+			std::this_thread::sleep_for(1s);
+		}
+	}
+}
 
 void mode_change(int gpio, int level, uint32_t tick) {
     // Toggle metronome timing mode
@@ -57,8 +75,16 @@ int main(){
 
 	// now congiure rest service here
 
+	//
+
+	// Use a separate thread for the blinking.
+	// This way we do not have to worry about any delays
+	// caused by polling the button state / etc.
+	std::thread blink_thread(blink);
+	blink_thread.detach();
+
 	while (true) { // main input loop
-        std::this_thread::sleep_for(1s);
+        // std::this_thread::sleep_for(1s);
         // Main loop can be used for additional tasks,
         // like updating BPM display if you have one.
     }

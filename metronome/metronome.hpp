@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <vector>
 
 class metronome
 {
@@ -11,6 +12,9 @@ public:
 	metronome()
 	: m_timing(false), m_beat_count(0) {}
 	~metronome() {}
+	std::vector<std::chrono::steady_clock::time_point> taps; // list of taps, to cacluate intevrals
+	bool playMode = false; //starts in learn mode
+
 
 public:
 	// Call when entering "learn" mode
@@ -29,7 +33,7 @@ public:
 
 private:
 	bool m_timing;
-
+	
 	// Insert new samples at the end of the array, removing the oldest
 	size_t m_beats[beat_samples];
 	size_t m_beat_count;
