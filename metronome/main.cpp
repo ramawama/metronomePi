@@ -2,11 +2,11 @@
 #include <thread>
 using namespace std::chrono_literals;
 
-#include <cpprest/http_msg.h>
-#include <wiringPi.h>
+#include <csignal>
+#include <iostream>
+#include <pigpio.h>
 
 #include "metronome.hpp"
-#include "rest.hpp"
 
 // ** Remember to update these numbers to your personal setup. **
 #define LED_RED   17
