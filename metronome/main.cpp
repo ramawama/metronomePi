@@ -24,8 +24,10 @@ void blink() {
 			auto delay = 60000ms / bpm; // bpm -> ms
 			// The LED state will toggle for delay.
 			gpioWrite(LED_GREEN, 1); // turn it on 
+			std::this_thread::sleep_for(delay/2);
 			gpioWrite(LED_GREEN, 0); // turn it off 
-			std::this_thread::sleep_for(delay);
+			std::this_thread::sleep_for(delay/2);
+
 		}
 		else {
 			std::this_thread::sleep_for(1s);
