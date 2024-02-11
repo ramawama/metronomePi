@@ -13,7 +13,7 @@ public:
 	: m_timing(false), m_beat_count(0) {}
 	~metronome() {}
 	//std::vector<std::chrono::steady_clock::time_point> taps; // list of taps, to cacluate intevrals
-	bool playMode = false; //starts in learn mode
+	bool playMode = true; //starts in learn mode, change it  later
 
 
 public:
