@@ -1,3 +1,0 @@
-C:/Users/ramaj/_Documents/GitHub/metronomePi/build/CMakeFiles/main.dir
-C:/Users/ramaj/_Documents/GitHub/metronomePi/build/CMakeFiles/edit_cache.dir
-C:/Users/ramaj/_Documents/GitHub/metronomePi/build/CMakeFiles/rebuild_cache.dir
