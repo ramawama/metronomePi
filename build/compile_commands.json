@@ -1,0 +1,8 @@
+[
+{
+  "directory": "C:/Users/ramaj/_Documents/GitHub/metronomePi/build",
+  "command": "C:/MinGW/bin/g++.exe   -g -std=gnu++14 -o CMakeFiles/main.dir/main.cpp.obj -c C:/Users/ramaj/_Documents/GitHub/metronomePi/metronome/main.cpp",
+  "file": "C:/Users/ramaj/_Documents/GitHub/metronomePi/metronome/main.cpp",
+  "output": "CMakeFiles/main.dir/main.cpp.obj"
+}
+]
