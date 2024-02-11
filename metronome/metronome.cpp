@@ -1,13 +1,6 @@
 #include "metronome.hpp"
 
-metronome::metronome(){
-    playMode = true; // change
-    
-}
 
-metronome::~metronome(){
-    
-}
 
 void metronome::start_timing(){
     m_timing = true;
@@ -25,6 +18,10 @@ void metronome::stop_timing(){
 void metronome::tap(){
 
 }
+
+// bool metronome::is_timing() const{
+//     return false;
+// }
 
 size_t metronome::get_bpm() const {
     return 60;
