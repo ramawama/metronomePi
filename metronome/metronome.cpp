@@ -6,7 +6,7 @@ metronome::metronome(){
 }
 
 metronome::~metronome(){
-
+    
 }
 
 void metronome::start_timing(){
