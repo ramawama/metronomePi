@@ -6,9 +6,6 @@ import { Input } from "@/components/ui/input"
 export default function bpmDashboard() {
   return (
     <div className="flex flex-col w-full min-h-screen p-4 md:p-6">
-      <header className="flex items-center h-16 px-4 border-b md:px-6">
-        <h1 className="text-2xl font-bold">BPM Dashboard</h1>
-      </header>
       <main className="flex-1 flex flex-col items-center justify-center gap-4">
         <div className="text-6xl font-bold">120 BPM</div>
         <div className="text-2xl font-bold">Minimum BPM: 120</div>
@@ -18,7 +15,7 @@ export default function bpmDashboard() {
           <Button className="w-full md:w-auto">Reset Min & Max </Button>
         </div>
         <div className="w-full max-w-md">
-          <Card className="mt-8">
+          <Card className="mt-20">
             <CardHeader>
               <CardTitle>Set Your BPM</CardTitle>
             </CardHeader>
