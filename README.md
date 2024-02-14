@@ -11,7 +11,8 @@ TODO: explain how to run frontend and what we did/used.
 ## API
 ### Dependencies
 This requires python already installed on your system.
-In order to run the API ```cd .\api\``` into the api folder and install flask using ```pip install -U Flask```. Then the api can be ran using ```python main.py```.
+In order to run the API ```cd .\api\``` into the api folder and install flask using ```pip install -U Flask```. Then the api can be ran using ```python main.py```. The api is hosted on localhost and its methods can be accessed accordingly. 
+Text Stephen if you have any questions/concerns!
 
 ### Documentation
 Used flask and python to create a REST api that has 3 endpoints:
@@ -23,3 +24,5 @@ Uses GET method to return the current maximum BPM or remove with a DELETE method
 Uses GET method to return the current minimum BPM or sets to 0 with a DELETE method.
 
 ## Backend
+
+TODO: same thing as frontend.
