@@ -86,8 +86,8 @@ int main(){
 	blink_thread.detach();
 
 	while (true) { // main input loop
-	    bool current_btn_mode_state = (digitalRead(BTN_MODE) == HIGH);
-	
+	    //bool current_btn_mode_state = (digitalRead(BTN_MODE) == HIGH);
+
         // std::this_thread::sleep_for(1s);
         // Main loop can be used for additional tasks,
         // like updating BPM display if you have one.
