@@ -8,12 +8,14 @@ class metronome
 public:
 	enum { beat_samples = 3 };
 	// Constructor and destructor
-	metronome()
-	: m_timing(false), m_beat_count(0) {}
+	metronome() {
+        m_timing = false; // Initialize m_timing to false
+        m_beat_count = 60; // Initialize m_beat_count to 0
+    }
 	~metronome() {}
 	//std::vector<std::chrono::steady_clock::time_point> taps; // list of taps, to cacluate intevrals
 	bool playMode = true; //starts in learn mode, change it  later
-	
+
 	// Call when entering "learn" mode
 	void start_timing();
 	// Call when leaving "learn" mode
