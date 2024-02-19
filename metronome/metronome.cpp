@@ -24,6 +24,6 @@ void metronome::tap(){
 // }
 
 size_t metronome::get_bpm() const {
-    return 60;
+    return this->m_beat_count;
 }
 

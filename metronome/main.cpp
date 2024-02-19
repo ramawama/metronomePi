@@ -20,7 +20,7 @@ void blink() {
 	// ** This loop manages LED blinking. **
 	while (true) {
 		if (myMetronome.playMode){ //If playing, blink
-			auto bpm = myMetronome.get_bpm(); // get current bpm
+			size_t bpm = myMetronome.get_bpm(); // get current bpm
 			auto delay = 60000ms / bpm; // bpm -> ms
 			// The LED state will toggle for delay.
 			gpioWrite(LED_GREEN, 1); // turn it on 
@@ -86,6 +86,8 @@ int main(){
 	blink_thread.detach();
 
 	while (true) { // main input loop
+	    bool current_btn_mode_state = (digitalRead(BTN_MODE) == HIGH);
+	
         // std::this_thread::sleep_for(1s);
         // Main loop can be used for additional tasks,
         // like updating BPM display if you have one.
