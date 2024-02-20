@@ -22,7 +22,7 @@ void metronome::stop_timing() { //play mode
 
 void metronome::tap(){
     auto now = std::chrono::steady_clock::now();
-    if (last_tap == 0) { // First tap
+    if (last_tap == std::chrono::steady_clock::time_point::min()) { // First tap
         last_tap = now;
         return; // return since first tap need at least two for durations
     }
