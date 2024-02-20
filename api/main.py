@@ -1,5 +1,18 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import os
+import ctypes
+
+os.chdir("..")
+path = os.getcwd()
+os.chdir("./api/")
+
+handler = ctypes.CDLL(path + "/metronome/bpmlib.dll")
+
+handler.get_bpm.restype = ctypes.c_int
+handler.get_min.restype = ctypes.c_int
+handler.get_max.restype = ctypes.c_int
+
 
 app = Flask(__name__)
 CORS(app)

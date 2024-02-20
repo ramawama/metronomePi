@@ -85,3 +85,18 @@ size_t metronome::get_min() const { // higher delay == small bpm, so we must swi
     }
     return 60000 / min; // returns in bpm
 }
+
+extern "C"
+{
+    int get_bpm(){
+        return get_bpm();
+    }
+    
+    int get_min(){
+        return get_min();
+    }
+
+    int get_max(){
+        return get_max();
+    }
+}
