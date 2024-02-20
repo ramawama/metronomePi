@@ -24,7 +24,7 @@ void metronome::stop_timing() { //play mode
 void metronome::tap(){
 
     auto now = std::chrono::steady_clock::now();
-
+    
     if (firstTap) { // First tap
         firstTap = false;
         last_tap = now;
@@ -43,12 +43,12 @@ void metronome::tap(){
 
     }
     else { // iterates removing oldest 
-        m_beats[0] = m_beats[1];
+        m_beats[0] = m_beats[1]; 
         m_beats[1] = m_beats[2];
         m_beats[2] = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_tap).count();
         last_tap = now;
         m_beat_count = (m_beats[0] + m_beats[1] + m_beats[2]) / 3;
-        return;
+return;
 
     }
 }
