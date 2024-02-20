@@ -1,18 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os
-import ctypes
-
-os.chdir("..")
-path = os.getcwd()
-os.chdir("./api/")
-
-handler = ctypes.CDLL(path + "/metronome/bpmlib.dll")
-
-handler.get_bpm.restype = ctypes.c_int
-handler.get_min.restype = ctypes.c_int
-handler.get_max.restype = ctypes.c_int
-
 
 app = Flask(__name__)
 CORS(app)
@@ -43,7 +30,7 @@ def put_bpm():
 
 
 # Uses get method to retrieve minimum and delete to reset minimum.
-@app.route("/bpm/min/", methods=["DELETE", "GET"])
+@app.route("/bpm/min/", methods=["DELETE", "GET", "PUT"])
 def get_min():
 
     if request.method == "DELETE":
@@ -57,11 +44,18 @@ def get_min():
             return jsonify(min), 200
         return jsonify({'error': 'Minimum currently not set.'}), 400
     
+    if request.method == "PUT":
+        new_data = request.get_json()
+        if ("Min" in new_data):
+            min["Min"] = new_data["Min"]
+            return jsonify({"message": "Min updated successfully"}), 200
+        return jsonify({"error": "JSON not given in correct format, use \"Min\" as key."})
+    
     return jsonify({"message":  "Not valid HTTP method."}), 400
 
 
 # Uses get method to retrieve maximum and delete to reset maximum.
-@app.route("/bpm/max/", methods=["DELETE", "GET"])
+@app.route("/bpm/max/", methods=["DELETE", "GET","PUT"])
 def get_max():
 
     if request.method == "DELETE":
@@ -74,6 +68,13 @@ def get_max():
         if max["Max"] is not None:
             return jsonify(max), 200
         return jsonify({'error': 'Maximum currently not set.'}), 400
+    
+    if request.method == "PUT":
+        new_data = request.get_json()
+        if ("Max" in new_data):
+            max["Max"] = new_data["Max"]
+            return jsonify({"message": "Max updated successfully"}), 200
+        return jsonify({"error": "JSON not given in correct format, use \"Max\" as key."})
     
     return jsonify({"message":  "Not valid HTTP method."}), 400
 
