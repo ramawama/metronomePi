@@ -37,7 +37,7 @@ void metronome::tap(){
         if (curr_indx == 3){
             m_beat_count = (m_beats[0] + m_beats[1] + m_beats[2]) / 3;
             // std::cout << m_beat_count << std::endl;
-            this->stop_timing(); // delete this later
+            //this->stop_timing(); // delete this later
         }
         return;
 
@@ -54,9 +54,15 @@ void metronome::tap(){
     }
 }
 
-// bool metronome::is_timing() const{
-//     return false;
-// }
+//bool metronome::is_timing() const{
+    // if (m_timing) {
+    //     return true;
+    // }
+    // else {
+    //     return false;
+    // }
+    
+//}
 
 size_t metronome::get_bpm() const {
     if (curr_indx < 3) {

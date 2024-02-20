@@ -16,14 +16,15 @@ using namespace std::chrono_literals;
 metronome myMetronome;
 std::chrono::steady_clock::time_point last_tap = std::chrono::steady_clock::now();
 std::chrono::steady_clock::time_point last_mode_change = std::chrono::steady_clock::now();
-constexpr auto debounce_period = std::chrono::milliseconds(150);
+constexpr auto debounce_period = std::chrono::milliseconds(250);
 
 
 void blink() {
-	bool on = false;
+	bool on = true;
 	// ** This loop manages LED blinking. **
-	while (true) {
-		if (myMetronome.playMode){ //If playing, blink
+	while (on) {
+		if (myMetronome.is_playmode()){ //If playing, blink
+			std::cout << "metronome play on" << std::endl;
 			size_t bpm = myMetronome.get_bpm(); // get current bpm
 			auto delay = std::chrono::milliseconds(bpm); // bpm -> ms
 			// The LED state will toggle for delay.
@@ -35,6 +36,7 @@ void blink() {
 		}
 		else {
 			std::this_thread::sleep_for(1s);
+			std::cout << "metronome play off" << std::endl;
 		}
 	}
 }
@@ -43,16 +45,16 @@ void mode_change(int gpio, int level, uint32_t tick) {
     // Toggle metronome timing mode
     if (myMetronome.is_timing()) { // if in learn mode switch to play
         myMetronome.stop_timing();
-        gpioWrite(LED_GREEN, 0); // Turn off green LED when stopping
-    } else { // in play mode start learning
+        //gpioWrite(LED_GREEN, 1); // Turn on green LED when stopping
+    } else if (myMetronome.is_playmode()) { // in play mode start learning
         myMetronome.start_timing();
-        gpioWrite(LED_GREEN, 1); // Turn on green LED when starting
+        gpioWrite(LED_GREEN,0); // Turn off green LED when starting
     }
 }
 
 void tap_input(int gpio, int level, uint32_t tick) {
 	auto now = std::chrono::steady_clock::now();
-	if (now - last_mode_change > debounce_period){
+	if ((now - last_mode_change > debounce_period) && myMetronome.is_timing()){
 		myMetronome.tap();
 		// Flash red LED on tap
 		gpioWrite(LED_RED, 1);
@@ -80,7 +82,7 @@ int main(){
     gpioSetPullUpDown(BTN_TAP, PI_PUD_DOWN);
 
 	// set handlers for button presses, to change mode or set bpm
-    gpioSetISRFunc(BTN_MODE, RISING_EDGE, 0, tap_input);
+    gpioSetISRFunc(BTN_MODE, RISING_EDGE, 0, mode_change);
     gpioSetISRFunc(BTN_TAP, RISING_EDGE, 0, tap_input);
 
 	// now congiure rest service here
@@ -92,7 +94,8 @@ int main(){
 	// caused by polling the button state / etc.
 	std::thread blink_thread(blink);
 	blink_thread.detach();
-	
+	gpioWrite(LED_GREEN, 0);
+
 	while (true) { // main input loop
 	    //bool current_btn_mode_state = (digitalRead(BTN_MODE) == HIGH);
 
@@ -105,87 +108,4 @@ int main(){
 }
 
 
-/* helal code 
-** Remember to update these numbers to your personal setup. **
-#define LED_RED   17
-#define LED_GREEN 27
-#define BTN_MODE  23
-#define BTN_TAP   24
 
-// Mark as volatile to ensure it works multi-threaded.
-volatile bool btn_mode_pressed = false;
-
-// Run an additional loop separate from the main one.
-void blink() {
-	bool on = false;
-	// ** This loop manages LED blinking. **
-	while (true) {
-		// The LED state will toggle once every second.
-		std::this_thread::sleep_for(1s);
-
-		// Perform the blink if we are pressed,
-		// otherwise just set it to off.
-		if (btn_mode_pressed)
-			on = !on;
-		else
-			on = false;
-
-		// HIGH/LOW probably equal 1/0, but be explicit anyways.
-		digitalWrite(LED_RED, (on) ? HIGH : LOW);
-	}
-}
-
-// This is called when a GET request is made to "/answer".
-void get42(web::http::http_request msg) {
-	msg.reply(200, web::json::value::number(42));
-}
-
-// This program shows an example of input/output with GPIO, along with
-// a dummy REST service.
-// ** You will have to replace this with your metronome logic, but the
-//    structure of this program is very relevant to what you need. **
-int main() {
-	// WiringPi must be initialized at the very start.
-	// This setup method uses the Broadcom pin numbers. These are the
-	// larger numbers like 17, 24, etc, not the 0-16 virtual ones.
-	gpioInitialise();
-	// Set up the directions of the pins.
-	// Be careful here, an input pin set as an output could burn out.
-	pinMode(LED_RED, OUTPUT);
-	pinMode(BTN_MODE, INPUT);
-	// Note that you can also set a pull-down here for the button,
-	// if you do not want to use the physical resistor.
-	//pullUpDnControl(BTN_MODE, PUD_DOWN);
-
-	// Configure the rest services after setting up the pins,
-	// but before we start using them.
-	// ** You should replace these with the BPM endpoints. **
-	auto get42_rest = rest::make_endpoint("/answer");
-	get42_rest.support(web::http::methods::GET, get42);
-
-	// Start the endpoints in sequence.
-	get42_rest.open().wait();
-
-	// Use a separate thread for the blinking.
-	// This way we do not have to worry about any delays
-	// caused by polling the button state / etc.
-	std::thread blink_thread(blink);
-	blink_thread.detach();
-
-	// ** This loop manages reading button state. **
-	while (true) {
-		// We are using a pull-down, so pressed = HIGH.
-		// If you used a pull-up, compare with LOW instead.
-		btn_mode_pressed = (digitalRead(BTN_MODE) == HIGH);
-		// Delay a little bit so we do not poll too heavily.
-		std::this_thread::sleep_for(10ms);
-
-		// ** Note that the above is for testing when the button
-		// is held down. For detecting "taps", or momentary
-		// pushes, you need to check for a "rising edge" -
-		// this is when the button changes from LOW to HIGH... **
-	}
-
-	return 0;
-}
-*/
