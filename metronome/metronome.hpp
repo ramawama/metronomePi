@@ -1,18 +1,20 @@
 #pragma once
 
 #include <cstddef>
+#include <vector>
+#include <iostream>
+#include <chrono>
 
 class metronome
 {
 public:
-	enum { beat_samples = 3 };
+	enum { tap_samples = 3 };
+	// Constructor and destructor
+	metronome();
+	~metronome();
+	//std::vector<std::chrono::steady_clock::time_point> taps; // list of taps, to cacluate intevrals
+	bool playMode;
 
-public:
-	metronome()
-	: m_timing(false), m_beat_count(0) {}
-	~metronome() {}
-
-public:
 	// Call when entering "learn" mode
 	void start_timing();
 	// Call when leaving "learn" mode
@@ -27,11 +29,17 @@ public:
 	// Return 0 if there are not enough samples
 	size_t get_bpm() const;
 
+	size_t get_max() const;
+	size_t get_min() const;
+
 private:
 	bool m_timing;
-
 	// Insert new samples at the end of the array, removing the oldest
-	size_t m_beats[beat_samples];
+	size_t m_beats[tap_samples];
+	int curr_indx = 0;
 	size_t m_beat_count;
+	bool firstTap = true;
+	std::chrono::steady_clock::time_point last_tap = std::chrono::steady_clock::time_point::min(); 
+
 };
 
