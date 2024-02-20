@@ -45,7 +45,7 @@ void mode_change(int gpio, int level, uint32_t tick) {
     // Toggle metronome timing mode
     if (myMetronome.is_timing()) { // if in learn mode switch to play
         myMetronome.stop_timing();
-        gpioWrite(LED_GREEN, 1); // Turn on green LED when stopping
+        //gpioWrite(LED_GREEN, 1); // Turn on green LED when stopping
     } else if (myMetronome.is_playmode()) { // in play mode start learning
         myMetronome.start_timing();
         gpioWrite(LED_GREEN,0); // Turn off green LED when starting
@@ -94,7 +94,8 @@ int main(){
 	// caused by polling the button state / etc.
 	std::thread blink_thread(blink);
 	blink_thread.detach();
-	
+	gpioWrite(LED_GREEN, 0);
+
 	while (true) { // main input loop
 	    //bool current_btn_mode_state = (digitalRead(BTN_MODE) == HIGH);
 
