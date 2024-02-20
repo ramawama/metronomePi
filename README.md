@@ -24,5 +24,12 @@ Uses GET method to return the current maximum BPM or remove with a DELETE method
 Uses GET method to return the current minimum BPM or sets to 0 with a DELETE method.
 
 ## Backend
-
+To run the backend, compile the code by entering the command below. Ensure that you are in the **metronome directory** so it compiles properly.
+```shell
+sudo g++ -o main main.cpp metronome.cpp -lpigpio -lrt -lpthread
+```
+After compiling enter this command below.
+```shell
+sudo ./main
+```
 TODO: same thing as frontend.
