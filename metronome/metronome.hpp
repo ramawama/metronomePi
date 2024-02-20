@@ -35,7 +35,7 @@ private:
 	size_t m_beats[tap_samples];
 	int curr_indx = 0;
 	size_t m_beat_count;
-	auto last_tap = 0; 
+	std::chrono::steady_clock::time_point last_tap = 0; 
 
 };
 

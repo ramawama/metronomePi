@@ -26,15 +26,15 @@ void metronome::tap(){
         last_tap = now;
         return;
     }
-    else if (curr_index < 3){ //first 4 taps
-        m_beats[curr_indx] = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_tap).count();
+    else if (this->curr_index < 3){ //first 4 taps
+        m_beats[this->curr_indx] = std::chrono::duration<std::chrono::milliseconds>(now - last_tap).count();
         last_tap = now;
         curr_indx++;
     }
     else { // iterates removing oldest 
         m_beats[0] = m_beats[1];
         m_beats[1] = m_beats[2];
-        m_beats[2] = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_tap).count();
+        m_beats[2] = std::chrono::duration<std::chrono::milliseconds>(now - last_tap).count();
         last_tap = now;
         m_beat_count = (m_beats[0] + m_beats[1] + m_beats[2]) / 3;
     }
