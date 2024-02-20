@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <vector>
+#include <iostream>
 #include <chrono>
 
 class metronome
