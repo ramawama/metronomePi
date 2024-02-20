@@ -36,6 +36,7 @@ void metronome::tap(){
         m_beats[1] = m_beats[2];
         m_beats[2] = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_tap).count();
         last_tap = now;
+        m_beat_count = (m_beats[0] + m_beats[1] + m_beats[2]) / 3;
     }
 }
 
@@ -44,6 +45,10 @@ void metronome::tap(){
 // }
 
 size_t metronome::get_bpm() const {
+    if (curr_indx < 3) {
+        std::cout << "Not enough samples" << std::endl;
+        return 0;
+    }
     return this->m_beat_count;
 }
 
