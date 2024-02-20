@@ -25,7 +25,7 @@ void blink() {
 	while (true) {
 		if (myMetronome.playMode){ //If playing, blink
 			size_t bpm = myMetronome.get_bpm(); // get current bpm
-			auto delay = bpm * 1ms; // bpm -> ms
+			auto delay = std::chrono::milliseconds(bpm); // bpm -> ms
 			// The LED state will toggle for delay.
 			gpioWrite(LED_GREEN, 1); // turn it on 
 			std::this_thread::sleep_for(delay/2);
