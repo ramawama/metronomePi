@@ -24,7 +24,7 @@ void metronome::tap(){
     auto now = std::chrono::steady_clock::now();
     if (last_tap == 0) { // First tap
         last_tap = now;
-        return;
+        return; // return since first tap need at least two for durations
     }
     else if (this->curr_index < 3){ //first 4 taps
         m_beats[this->curr_indx] = std::chrono::duration<std::chrono::milliseconds>(now - last_tap).count();
@@ -32,7 +32,7 @@ void metronome::tap(){
         curr_indx++;
     }
     else { // iterates removing oldest 
-        m_beats[0] = m_beats[1];
+        m_beats[0] = m_beats[1]; 
         m_beats[1] = m_beats[2];
         m_beats[2] = std::chrono::duration<std::chrono::milliseconds>(now - last_tap).count();
         last_tap = now;
