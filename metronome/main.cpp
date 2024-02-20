@@ -20,10 +20,11 @@ constexpr auto debounce_period = std::chrono::milliseconds(150);
 
 
 void blink() {
-	bool on = false;
+	bool on = true;
 	// ** This loop manages LED blinking. **
-	while (true) {
-		if (myMetronome.playMode){ //If playing, blink
+	while (on) {
+		if (myMetronome.is_playmode()){ //If playing, blink
+			std::cout << "metronome play on" << std::endl;
 			size_t bpm = myMetronome.get_bpm(); // get current bpm
 			auto delay = std::chrono::milliseconds(bpm); // bpm -> ms
 			// The LED state will toggle for delay.
@@ -35,6 +36,7 @@ void blink() {
 		}
 		else {
 			std::this_thread::sleep_for(1s);
+			std::cout << "metronome play off" << std::endl;
 		}
 	}
 }
@@ -43,16 +45,16 @@ void mode_change(int gpio, int level, uint32_t tick) {
     // Toggle metronome timing mode
     if (myMetronome.is_timing()) { // if in learn mode switch to play
         myMetronome.stop_timing();
-        gpioWrite(LED_GREEN, 0); // Turn off green LED when stopping
-    } else { // in play mode start learning
+        gpioWrite(LED_GREEN, 1); // Turn on green LED when stopping
+    } else if (myMetronome.is_playmode()) { // in play mode start learning
         myMetronome.start_timing();
-        gpioWrite(LED_GREEN, 1); // Turn on green LED when starting
+        gpioWrite(LED_GREEN,0); // Turn off green LED when starting
     }
 }
 
 void tap_input(int gpio, int level, uint32_t tick) {
 	auto now = std::chrono::steady_clock::now();
-	if (now - last_mode_change > debounce_period){
+	if ((now - last_mode_change > debounce_period) && myMetronome.is_timing()){
 		myMetronome.tap();
 		// Flash red LED on tap
 		gpioWrite(LED_RED, 1);
@@ -80,7 +82,7 @@ int main(){
     gpioSetPullUpDown(BTN_TAP, PI_PUD_DOWN);
 
 	// set handlers for button presses, to change mode or set bpm
-    gpioSetISRFunc(BTN_MODE, RISING_EDGE, 0, tap_input);
+    gpioSetISRFunc(BTN_MODE, RISING_EDGE, 0, mode_change);
     gpioSetISRFunc(BTN_TAP, RISING_EDGE, 0, tap_input);
 
 	// now congiure rest service here
