@@ -1,9 +1,9 @@
 #include "metronome.hpp"
 
 metronome::metronome(){
-    m_timing = false; // Initialize m_timing to false
-    m_beat_count = 60; // Initialize m_beat_count to 0
-    playMode = true; //starts in learn mode, change it  later
+    m_timing = true; // Initialize m_timing to false
+    m_beat_count = 0; // Initialize m_beat_count to 0
+    playMode = false; //starts in learn mode, change it  later
 }
 
 metronome::~metronome() {}
@@ -46,7 +46,7 @@ void metronome::tap(){
 
 size_t metronome::get_bpm() const {
     if (curr_indx < 3) {
-        std::cout << "Not enough samples" << std::endl;
+        std::cerr << "Not enough samples" << std::endl;
         return 0;
     }
     return this->m_beat_count;
