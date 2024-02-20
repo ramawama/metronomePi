@@ -48,6 +48,8 @@ void metronome::tap(){
         m_beats[2] = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_tap).count();
         last_tap = now;
         m_beat_count = (m_beats[0] + m_beats[1] + m_beats[2]) / 3;
+        std::cerr << "get_max()" << get_max << std::endl;
+        std::cerr << "get_min()" << get_min << std::endl;
 return;
 
     }
@@ -65,3 +67,22 @@ size_t metronome::get_bpm() const {
     return this->m_beat_count;
 }
 
+size_t metronome::get_max() const {
+    size_t max = m_beats[0];
+    for (int i = 1; i < 3; i++){
+        if (m_beats[i] > max){
+            max = m_beats[i];
+        }
+    }
+    return 60000ms / max; // returns in ms
+}
+
+size_t metronome::get_min() const {
+    size_t min = m_beats[0];
+    for (int i = 1; i < 3; i++){
+        if (m_beats[i] < min){
+            min = m_beats[i];
+        }
+    }
+    return 60000ms / min; // returns in ms
+}

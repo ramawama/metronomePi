@@ -92,7 +92,7 @@ int main(){
 	// caused by polling the button state / etc.
 	std::thread blink_thread(blink);
 	blink_thread.detach();
-
+	
 	while (true) { // main input loop
 	    //bool current_btn_mode_state = (digitalRead(BTN_MODE) == HIGH);
 

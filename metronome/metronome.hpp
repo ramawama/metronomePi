@@ -29,9 +29,11 @@ public:
 	// Return 0 if there are not enough samples
 	size_t get_bpm() const;
 
+	size_t get_max() const;
+	size_t get_min() const;
+
 private:
 	bool m_timing;
-	
 	// Insert new samples at the end of the array, removing the oldest
 	size_t m_beats[tap_samples];
 	int curr_indx = 0;
