@@ -5,9 +5,9 @@ app = Flask(__name__)
 CORS(app)
 
 # Dicts used to convert to json objects
-bpm = {"BPM" : None}
-min = {"Min" : None}
-max = {"Max" : None}
+bpm = {"BPM" : 0}
+min = {"Min" : 0}
+max = {"Max" : 0}
 
 
 # Uses put method to update BPM and get method to retrieve.
@@ -34,7 +34,7 @@ def get_min():
 
     if request.method == "DELETE":
         if(min["Min"] is not None):
-            min["Min"] = None
+            min["Min"] = 0
             return jsonify({"message": "BPM reset to 0."}), 200
         return jsonify({"message": "BPM already 0."}), 200
 
@@ -59,7 +59,7 @@ def get_max():
 
     if request.method == "DELETE":
         if(max["Max"] is not None):
-            max["Max"] = None
+            max["Max"] = 0
             return jsonify({"message": "BPM reset to None."}), 200
         return jsonify({"message": "BPM already None."}), 200
     
