@@ -3,7 +3,7 @@
 ### Group Members: Rama Janco, Devin DuBois, Stephen Coomes, Patrick Nguyen
 
 ## Description
-TODO: write description
+We created this simple metronome project utilizing a Raspberry Pi for CIS4930, Mobile Computing. We implemented two buttons, one to switch modes and one to set the bpm, alongside two LEDs on our Pi board. We utilized C++ to implement these embedded functions. We also created a simple web interface using Next.JS to display and interact with the metronome's current BPM and its minimum and maximum tempo. These requests are performed through the Flask transport layer, ensuring we can interact with the Pi remotely.
 
 ## Frontend 
 TODO: explain how to run frontend and what we did/used.
@@ -32,4 +32,3 @@ After compiling enter this command below.
 ```shell
 sudo ./main
 ```
-TODO: same thing as frontend.
