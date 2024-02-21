@@ -47,7 +47,7 @@ export default function bpmDashboard() {
 
   // TODO: Add checker in update to ensure numbers are inputted
   async function updateBPM() {
-    if(BPMinput != ""){
+    if(BPMinput != "" && Number(BPMinput) > 0){
       await fetch("http://127.0.0.1:5000/bpm/", {
         method: 'PUT',
         headers: {
