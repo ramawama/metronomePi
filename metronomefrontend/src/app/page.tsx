@@ -53,7 +53,7 @@ export default function bpmDashboard() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ "BPM": BPMinput })
+        body: JSON.stringify({BPM: Number(BPMinput)})
       }).then(response => {
         if (response.ok) {
           setBPMinput("");
