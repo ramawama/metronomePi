@@ -47,22 +47,24 @@ export default function bpmDashboard() {
 
   // TODO: Add checker in update to ensure numbers are inputted
   async function updateBPM() {
-    await fetch("http://127.0.0.1:5000/bpm/", {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ "BPM": BPMinput })
-    }).then(response => {
-      if (response.ok) {
-        setBPMinput("");
-        getBPM();
-      } else {
-        console.error('Error updating BPM data');
-      }
-    }).catch(error => {
-      console.error('Error updating BPM data', error);
-    });
+    if(BPMinput != ""){
+      await fetch("http://127.0.0.1:5000/bpm/", {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ "BPM": BPMinput })
+      }).then(response => {
+        if (response.ok) {
+          setBPMinput("");
+          getBPM();
+        } else {
+          console.error('Error updating BPM data');
+        }
+      }).catch(error => {
+        console.error('Error updating BPM data', error);
+      });
+    }
   }
 
   function deleteMaxMin() {
