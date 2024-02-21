@@ -5,6 +5,7 @@ using namespace std::chrono_literals;
 #include <csignal>
 #include <iostream>
 #include <pigpio.h>
+#include <stream>
 #include "api_call.cpp"
 #include "metronome.hpp"
 
@@ -25,10 +26,17 @@ constexpr auto debounce_period = std::chrono::milliseconds(250);
 
 void blink() {
 	bool on = true;
+	size_t getBpm;
 	// ** This loop manages LED blinking. **
 	while (on) {
 		if (myMetronome.is_playmode()){ //If playing, blink
 			std::cout << "metronome play on" << std::endl;
+
+			getBpm = getAndParseJson(BPMurl);
+			if (getBpm != myMetronome.get_bpm()) {
+				myMetronome.set_bpm(bpm);
+			}
+
 			size_t bpm = myMetronome.get_bpm(); // get current bpm
 			auto delay = std::chrono::milliseconds(bpm); // bpm -> ms
 			// The LED state will toggle for delay.

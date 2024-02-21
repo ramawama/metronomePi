@@ -72,6 +72,13 @@ size_t metronome::get_bpm() const {
     return this->m_beat_count;
 }
 
+void metronome::set_bpm(size_t newBPM) {
+    if (curr_indx < 3) {
+        std::cerr << "Not enough samples" << std::endl;
+    }
+    else this->m_beat_count = newBPM;
+}
+
 size_t metronome::get_max() const {
     size_t max = m_beats[0];
     for (int i = 1; i < 3; i++){
