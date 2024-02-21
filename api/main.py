@@ -13,7 +13,6 @@ max = {"Max" : None}
 # Uses put method to update BPM and get method to retrieve.
 @app.route("/bpm/", methods=["PUT", "GET"])
 def put_bpm():
-
     if request.method == "PUT":
         new_data = request.get_json()
         if ("BPM" in new_data):

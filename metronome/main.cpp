@@ -5,13 +5,17 @@ using namespace std::chrono_literals;
 #include <csignal>
 #include <iostream>
 #include <pigpio.h>
-
+#include "api_call.cpp"
 #include "metronome.hpp"
 
 #define LED_RED   3 // red led
 #define LED_GREEN 14 // green led
 #define BTN_MODE  2 // blue button
 #define BTN_TAP   17 //red button
+std::string BPMurl = "http://127.0.0.1:5000/bpm/";
+std::string BPMMaxurl = "http://127.0.0.1:5000/bpm/max/";
+std::string BPMMinurl = "http://127.0.0.1:5000/bpm/min/";
+
 
 metronome myMetronome;
 std::chrono::steady_clock::time_point last_tap = std::chrono::steady_clock::now();
@@ -48,6 +52,25 @@ void mode_change(int gpio, int level, uint32_t tick) {
         //gpioWrite(LED_GREEN, 1); // Turn on green LED when stopping
     } else if (myMetronome.is_playmode()) { // in play mode start learning
         myMetronome.start_timing();
+		//Json for bpm call
+		Json::Value root;
+    	root["BPM"] = std::to_string(myMetronome.get_bpm());
+    	Json::StyledWriter writer; 
+    	std::string jsonData = writer.write(root);
+		//Json for max call
+		Json::Value max;
+		max["Max"] = std::to_string(myMetronome.get_max());
+		Json::StyledWriter maxWriter; 
+		std::string maxData = maxWriter.write(max);
+		std::cout << "MAX BPM:" << maxData << std::endl;
+		//Json for min call
+		Json::Value min;
+		min["Min"] = std::to_string(myMetronome.get_min());
+		Json::StyledWriter minWriter; 
+		std::string minData = minWriter.write(min);
+		sendPutRequest(BPMurl, jsonData);
+		sendPutRequest(BPMMaxurl, maxData);
+		sendPutRequest(BPMMinurl, minData);
         gpioWrite(LED_GREEN,0); // Turn off green LED when starting
     }
 }
