@@ -37,7 +37,7 @@ The backend of this project was implemented using C++. This embedded application
 ### Dependencies
 To run the backend, compile the code by entering the command below. Ensure that you are in the **metronome directory** so it compiles properly.
 ```shell
-sudo g++ -o main main.cpp metronome.cpp -lpigpio -lrt -lpthread
+sudo g++ -o main main.cpp metronome.cpp -lpigpio -lrt -lpthread -lcurl -ljsoncpp
 ```
 After compiling enter this command below.
 ```shell
