@@ -26,15 +26,19 @@ constexpr auto debounce_period = std::chrono::milliseconds(250);
 
 void blink() {
 	bool on = true;
-	size_t getBpm;
 	// ** This loop manages LED blinking. **
 	while (on) {
 		if (myMetronome.is_playmode()){ //If playing, blink
 			std::cout << "metronome play on" << std::endl;
 
-			getBpm = getAndParseJson(BPMurl);
-			if (getBpm != myMetronome.get_bpm()) {
-				myMetronome.set_bpm(bpm);
+			size_t getBpm = getAndParseJson(BPMurl);
+			jf (getBpm == 0) { // if failed to get bpm from server
+				std::cerr << "Error: Fetched BPM is 0, avoiding division by zero." << std::endl;
+			} // dont want ot divide 60k by 0
+			else getBpm = 60000 / getBpm; // since bpm is in ms already
+			if (getBpm != myMetronome.get_bpm() && getBpm != 0) {
+				myMetronome.set_bpm(getBpm);
+				std::cout << "BPM changed from user input" << std::endl;
 			}
 
 			size_t bpm = myMetronome.get_bpm(); // get current bpm
