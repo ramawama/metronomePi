@@ -7,12 +7,14 @@ import { Input } from "@/components/ui/input"
 import { useEffect, useState } from "react"
 
 export default function bpmDashboard() {
+
+  // Basic functions to declare the variables
   let [BPM, setBPM] = useState(0);
   let [Max, setMax] = useState(0);
   let [Min, setMin] = useState(0);
   let [BPMinput, setBPMinput] = useState("");
 
-
+  // Returns the bpm/min/max from the API
   async function getBPM() {
     await fetch("http://127.0.0.1:5000/bpm/min/")
       .then(response => response.json())
@@ -41,13 +43,12 @@ export default function bpmDashboard() {
       });
   }
 
-  // Dumb function that looks bad
   useEffect(() => {getBPM()}, []);
   
 
-  // TODO: Add checker in update to ensure numbers are inputted
+  // Checks  if input is valid and sends to API
   async function updateBPM() {
-    if(BPMinput != "" && Number(BPMinput) > 0){
+    if(BPMinput != "" && Number(BPMinput) > 0 && Number(BPMinput) <= 500){
       await fetch("http://127.0.0.1:5000/bpm/", {
         method: 'PUT',
         headers: {
@@ -65,8 +66,12 @@ export default function bpmDashboard() {
         console.error('Error updating BPM data', error);
       });
     }
+    else(
+      alert("Must provide a number from 1-500")
+    )
   }
 
+  // Calls delete request
   function deleteMaxMin() {
     fetch("http://127.0.0.1:5000/bpm/max/", {
       method: 'DELETE',
@@ -120,7 +125,7 @@ export default function bpmDashboard() {
             <CardContent className="space-y-4">
               <div className="space-y-1">
                 <Label htmlFor="bpm">BPM</Label>
-                <Input type="number" id="bpm" value={BPMinput} placeholder="Enter your BPM" onChange={(e) => setBPMinput(e.target.value)} />
+                <Input type="number" id="bpm" value={BPMinput} placeholder="Enter your BPM (1-500)" onChange={(e) => setBPMinput(e.target.value)} />
               </div>
             </CardContent>
             <CardFooter>
