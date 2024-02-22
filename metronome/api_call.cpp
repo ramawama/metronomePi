@@ -9,6 +9,54 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *use
     return size * nmemb;
 }
 
+std::string getAndParseJson(const std::string& url) {
+    CURL *curl;
+    CURLcode res;
+    std::string readBuffer;
+    std::size_t ret;
+    curl = curl_easy_init();
+
+     if(curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());  // Set the URL
+        // get is default so no need to specify
+
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+
+        res = curl_easy_perform(curl);
+        curl_easy_cleanup(curl);
+
+        if(res != CURLE_OK) {
+            std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
+            return false;
+        }
+
+        // Parse the JSON response
+        Json::Value jsonData;
+        Json::Reader reader;
+        if (reader.parse(readBuffer, jsonData) && jsonData.isMember(key) && jsonData[key].isString()) {
+            std::string valueString = jsonData[key].asString();
+            try {
+                // Convert string to unsigned long long first
+                unsigned long long tempValue = std::stoull(valueString);
+                // Then, if needed, static_cast to size_t
+                numericValue = static_cast<size_t>(tempValue);
+            } 
+            catch (const std::exception& e) {
+                std::cerr << "Conversion error: " << e.what() << std::endl;
+            }
+        }
+        else {
+                std::cerr << "Failed to parse JSON or key not found" << std::endl;
+        }
+
+        return ret;
+
+    }
+
+    return 0;
+}
+
 // Function to send a PUT request to an API
 bool sendPutRequest(const std::string& url, const std::string& jsonData) {
     CURL *curl;

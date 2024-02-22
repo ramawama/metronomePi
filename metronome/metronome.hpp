@@ -30,6 +30,7 @@ public:
 	// Return 0 if there are not enough samples
 	bool is_playmode() const { return playMode; }
 	size_t get_bpm() const;
+	void set_bpm(size_t newBPM);
 
 	size_t get_max() const;
 	size_t get_min() const;
