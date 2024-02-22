@@ -1,6 +1,7 @@
 #include <iostream>
 #include <curl/curl.h>
 #include <string>
+#include <cstddef>
 #include <jsoncpp/json/json.h>
 
 // Callback function to handle the response data
@@ -9,11 +10,11 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *use
     return size * nmemb;
 }
 
-std::string getAndParseJson(const std::string& url) {
+size_t getAndParseJson(const std::string& url) {
     CURL *curl;
     CURLcode res;
     std::string readBuffer;
-    std::size_t ret;
+    size_t ret = 0; // init to 0
     curl = curl_easy_init();
 
      if(curl) {
@@ -28,19 +29,20 @@ std::string getAndParseJson(const std::string& url) {
 
         if(res != CURLE_OK) {
             std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
-            return false;
+            return 0; // Return 0 if there was an error
         }
 
         // Parse the JSON response
         Json::Value jsonData;
         Json::Reader reader;
+        std::string key = "BPM";
         if (reader.parse(readBuffer, jsonData) && jsonData.isMember(key) && jsonData[key].isString()) {
             std::string valueString = jsonData[key].asString();
             try {
                 // Convert string to unsigned long long first
                 unsigned long long tempValue = std::stoull(valueString);
                 // Then, if needed, static_cast to size_t
-                numericValue = static_cast<size_t>(tempValue);
+                ret = static_cast<size_t>(tempValue);
             } 
             catch (const std::exception& e) {
                 std::cerr << "Conversion error: " << e.what() << std::endl;
@@ -50,11 +52,13 @@ std::string getAndParseJson(const std::string& url) {
                 std::cerr << "Failed to parse JSON or key not found" << std::endl;
         }
 
-        return ret;
+        return ret; // Return the value if successful, 0 if failed
 
     }
+    else std::cerr << "Failed to initialize curl" << std::endl;
 
-    return 0;
+
+    return 0; // Return 0 if there was an error
 }
 
 // Function to send a PUT request to an API
