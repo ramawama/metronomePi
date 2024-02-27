@@ -36,13 +36,18 @@ size_t getAndParseJson(const std::string& url) {
         Json::Value jsonData;
         Json::Reader reader;
         std::string key = "BPM";
-        if (reader.parse(readBuffer, jsonData) && jsonData.isMember(key) && jsonData[key].isString()) {
+        if (reader.parse(readBuffer, jsonData) && jsonData.isMember(key)) {
+            //std::cout << "READ FROM JSON" << jsonData[key] << std::endl;
+
             std::string valueString = jsonData[key].asString();
+            //std::cout << "valueString: " << valueString << std::endl;
             try {
                 // Convert string to unsigned long long first
                 unsigned long long tempValue = std::stoull(valueString);
                 // Then, if needed, static_cast to size_t
                 ret = static_cast<size_t>(tempValue);
+                //std::cout << "ret: " << ret << std::endl;
+
             } 
             catch (const std::exception& e) {
                 std::cerr << "Conversion error: " << e.what() << std::endl;
