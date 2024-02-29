@@ -65,18 +65,19 @@ void metronome::tap(){
 //}
 
 size_t metronome::get_bpm() const {
-    if (curr_indx < 3) {
-        std::cerr << "Not enough samples" << std::endl;
-        return 0;
-    }
+    // if (curr_indx < 3) {
+    //     std::cerr << "Not enough samples" << std::endl;
+    //     return 0;
+    // }
     return this->m_beat_count;
+    
 }
 
 void metronome::set_bpm(size_t newBPM) {
-    if (curr_indx < 3) {
-        std::cerr << "Not enough samples" << std::endl;
-    }
-    else this->m_beat_count = newBPM;
+    // if (curr_indx < 3) {
+    //     std::cerr << "Not enough samples" << std::endl;
+    // }
+    /*else*/ this->m_beat_count = newBPM;
 }
 
 size_t metronome::get_max() const {

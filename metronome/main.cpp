@@ -5,7 +5,7 @@ using namespace std::chrono_literals;
 #include <csignal>
 #include <iostream>
 #include <pigpio.h>
-#include <stream>
+//#include <stream>
 #include "api_call.cpp"
 #include "metronome.hpp"
 
@@ -32,11 +32,14 @@ void blink() {
 			std::cout << "metronome play on" << std::endl;
 
 			size_t getBpm = getAndParseJson(BPMurl);
-			jf (getBpm == 0) { // if failed to get bpm from server
-				std::cerr << "Error: Fetched BPM is 0, avoiding division by zero." << std::endl;
-			} // dont want ot divide 60k by 0
-			else getBpm = 60000 / getBpm; // since bpm is in ms already
-			if (getBpm != myMetronome.get_bpm() && getBpm != 0) {
+			std::cout << "getBPM:  "<< getBpm <<  std::endl;
+
+			// if (getBpm == 0) { // if failed to get bpm from server
+			// 	std::cerr << "Error: Fetched BPM is 0, avoiding division by zero." << std::endl;
+			// } // dont want ot divide 60k by 0
+			// else getBpm = 60000 / getBpm; // since bpm is in ms already
+			if (getBpm != 0) {
+				getBpm = 60000 / getBpm;
 				myMetronome.set_bpm(getBpm);
 				std::cout << "BPM changed from user input" << std::endl;
 			}
@@ -66,7 +69,7 @@ void mode_change(int gpio, int level, uint32_t tick) {
         myMetronome.start_timing();
 		//Json for bpm call
 		Json::Value root;
-    	root["BPM"] = std::to_string(myMetronome.get_bpm());
+    	root["BPM"] = std::to_string(60000 / myMetronome.get_bpm());
     	Json::StyledWriter writer; 
     	std::string jsonData = writer.write(root);
 		//Json for max call
